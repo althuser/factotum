@@ -2,18 +2,37 @@
 
 {% load static %}
 
-
 {% block content %}
-  <form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data" class="text-center">
     {% csrf_token %}
-    <input type="file" name="myfile">
-    <button class='btn btn-info' type="submit">Upload</button>
+    <!-- <input type="file"  data-buttonText="hello" data-classButton="btn btn-primary"> -->
+    <input type="file" name="myfile" class="filestyle">
+    <br>
+    <br>
+    <button class='btn btn-info btn-lg' type="submit">Upload</button>
   </form>
 
   {% if uploaded_file_url %}
-    <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+    <h3>Records Registered Successfully!</h3>
+    <dl class="row">
+        <dt class="col-sm-3">File uploaded at:</dt>
+        <dd class="col-sm-9">{{ uploaded_file_url }}</dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-3">Number of records created:</dt>
+        <dd class="col-sm-9">{{ uploaded_num }}</dd>
+    </dl>
+
   {% endif %}
+  <br>
+  <br>
+  <a href='{% url 'data_group_detail' datagroup_pk %}'><button type="button" class="btn btn-primary btn-lg">Return to DataGroup</button></a>
+{% endblock %}
 
-  <p><a href="{% url 'data_group_detail' datagroup_pk %}">Return to DataGroup</a></p>
-
+{% block footer_scripts %}
+  {{ block.super }}
+  <script src="{% static 'js/bootstrap-filestyle.min.js' %}"></script>
+  <script type="text/javascript">
+    $(":file").filestyle({size: "lg",btnClass: "btn-primary",text: "Find/Drag File"});
+  </script>
 {% endblock %}

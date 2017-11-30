@@ -1,10 +1,11 @@
-from datetime import datetime as dt
+import csv
 
 from django.shortcuts import render
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.forms import ModelForm
-from dashboard.models import DataDocument
+from dashboard.models import DataDocument, DataGroup
 
 
 
@@ -29,12 +30,11 @@ from dashboard.models import DataDocument
 #         'form': form
 #     })
 
+@login_required()
 def register_upload(request, template='data_document/upload.html'):
-    # num = str(DataDocument.objects.all().count()+1)
-    print(request.session.keys())
-    num = str(47)
+    num = str(DataDocument.objects.all().count()+1)
     datagroup_pk = request.session['datagroup_pk']
-    print(request.user.username)
+    datagroup = DataGroup.objects.filter(pk=datagroup_pk)[0]
     context = {'datagroup_pk': datagroup_pk,}
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
@@ -44,8 +44,23 @@ def register_upload(request, template='data_document/upload.html'):
                                         request.user.username,
                                         myfile.name)
         filename = fs.save(fn, myfile)
+        # add to DD here
         uploaded_file_url = fs.url(filename)
         context['uploaded_file_url'] = uploaded_file_url
-        # add to DD here
+        count = 0
+        with open(uploaded_file_url) as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                if not row['title']:
+                    row['title'] = row['filename'].split('.')[0]
+                doc = DataDocument(filename=row['filename'],
+                                    title=row['title'],
+                                    url=row['url'],
+                                    product_category=row['product'],
+                                    data_group=datagroup)
+                doc.save()
+                count += 1
+                print(row['filename'],row['title'],row['product'],row['url'])
+        context['uploaded_num'] = count
         return render(request, template, context)
     return render(request, template, context)
