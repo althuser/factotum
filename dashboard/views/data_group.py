@@ -25,6 +25,7 @@ def data_group_list(request, template_name='data_group/datagroup_list.html'):
 @login_required()
 def data_group_detail(request, pk, template_name='data_group/datagroup_detail.html'):
 	datagroup = get_object_or_404(DataGroup, pk=pk, )
+	request.session['datagroup_pk'] = pk
 	return render(request, template_name, {'object': datagroup})
 
 

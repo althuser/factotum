@@ -29,7 +29,6 @@ def data_source_detail(request, pk, template_name='data_source/datasource_detail
 	request.session['datasource_pk'] = datasource.pk
 	context = {
 		'object': datasource,
-		'datagroups': list(DataSource.objects.all()),
 		'datagroup_list':datagroup_list,
 		}
 	return render(request, template_name, context)
