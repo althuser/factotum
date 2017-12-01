@@ -6,7 +6,7 @@
   <form method="post" enctype="multipart/form-data" class="text-center">
     {% csrf_token %}
     <!-- <input type="file"  data-buttonText="hello" data-classButton="btn btn-primary"> -->
-    <input type="file" name="myfile" class="filestyle">
+    <input type="file" name="myfile" class="filestyle" height="480">
     <br>
     <br>
     <button class='btn btn-info btn-lg' type="submit">Upload</button>
@@ -15,14 +15,13 @@
   {% if uploaded_file_url %}
     <h3>Records Registered Successfully!</h3>
     <dl class="row">
-        <dt class="col-sm-3">File uploaded at:</dt>
-        <dd class="col-sm-9">{{ uploaded_file_url }}</dd>
+        <dt class="col-sm-6">File uploaded at:</dt>
+        <dd class="col-sm-6">{{ uploaded_file_url }}</dd>
     </dl>
     <dl class="row">
-        <dt class="col-sm-3">Number of records created:</dt>
-        <dd class="col-sm-9">{{ uploaded_num }}</dd>
+        <dt class="col-sm-6">Number of records created:</dt>
+        <dd class="col-sm-6">{{ uploaded_num }}</dd>
     </dl>
-
   {% endif %}
   <br>
   <br>
@@ -33,6 +32,8 @@
   {{ block.super }}
   <script src="{% static 'js/bootstrap-filestyle.min.js' %}"></script>
   <script type="text/javascript">
-    $(":file").filestyle({size: "lg",btnClass: "btn-primary",text: "Find/Drag File"});
+    $(":file").filestyle({size: "lg",
+                          btnClass: "btn-primary",
+                          text: "Find/Drag File"});
   </script>
 {% endblock %}
