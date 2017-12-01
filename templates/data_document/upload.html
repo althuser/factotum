@@ -10,7 +10,15 @@
     <br>
     <br>
     <button class='btn btn-info btn-lg' type="submit">Upload</button>
+    <br>
+    <br>
   </form>
+
+  {% if fail %}
+    <h3 class="bg-danger text-white">Records Not Registered!</h3>
+    <p>There are {{ fail }} records that don't have a filename.</p>
+    <p>Check that there is a filename in every row of the CSV and try again.</p>
+  {% endif %}
 
   {% if uploaded_file_url %}
     <h3>Records Registered Successfully!</h3>

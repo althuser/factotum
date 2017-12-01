@@ -30,6 +30,8 @@ def register_upload(request, template='data_document/upload.html'):
             up_num = len([i for i,d in enumerate(reader) if d['filename']])
             valid = up_num == reader.line_num-1
         if not valid: # missing filenames, delete and prompt to fix
+            context['uploaded_file_url'] = 0
+            context['fail'] = (reader.line_num-1) -up_num
             fs.delete(os.path.join(os.getcwd(), uploaded_file_url)) # problems here, test
             return render(request, template, context)
         # if not DataDocument.objects.last():

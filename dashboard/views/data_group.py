@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
 from dashboard.views import *
 from datetime import datetime
-from dashboard.models import DataGroup
+from dashboard.models import DataGroup, DataDocument
 
 
 class DataGroupForm(ModelForm):
@@ -25,8 +25,10 @@ def data_group_list(request, template_name='data_group/datagroup_list.html'):
 @login_required()
 def data_group_detail(request, pk, template_name='data_group/datagroup_detail.html'):
 	datagroup = get_object_or_404(DataGroup, pk=pk, )
+	docs = DataDocument.objects.filter(data_group_id=pk)
 	request.session['datagroup_pk'] = pk
-	return render(request, template_name, {'object': datagroup})
+	return render(request, template_name, {'object': datagroup,
+											'documents':docs})
 
 
 @login_required()
